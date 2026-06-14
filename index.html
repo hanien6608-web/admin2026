@@ -2087,7 +2087,15 @@
         function openEditBook(id) {
             const book = allBooks.find(b => String(b.id) === String(id)); if (!book) return;
             const card = document.getElementById('add-book-card');
-            editingBookId = id; toggleBookForm();
+            const btn = document.getElementById('toggle-form-btn');
+
+            editingBookId = book.id; 
+            
+            // نضمن فتح النموذج مباشرة بدلاً من استخدام toggleBookForm التي قد تغلقه إذا كان مفتوحاً
+            card.style.display = 'block';
+            btn.innerHTML = '<i class="bi bi-dash-circle-fill"></i> إلغاء التعديل';
+            card.scrollIntoView({ behavior: 'smooth' });
+
             document.getElementById('form-title').innerHTML = '<i class="bi bi-pencil-square"></i> تعديل بيانات: ' + book.title;
             document.getElementById('final-add-btn').innerHTML = 'تحديث البيانات <i class="bi bi-check-all"></i>';
             document.getElementById('book-title').value = book.title; document.getElementById('book-author').value = book.author || '';
@@ -2113,7 +2121,12 @@
             const price = document.getElementById('book-price').value.trim();
             const selectedCategories = Array.from(document.querySelectorAll('#category-chips input:checked')).map(cb => cb.value);
             const addBtn = document.getElementById('final-add-btn');
-            if(!title || !price) return alert("يجب كتابة العنوان والسعر!");
+
+            // فصل التحقق لضمان معرفة الحقل الناقص بدقة
+            if (!title) return alert("يرجى كتابة 'عنوان الكتاب' أولاً (الحقل الأول)!");
+            if (!price) return alert("يرجى كتابة 'سعر الكتاب'!");
+            if (isNaN(price) || parseFloat(price) < 0) return alert("يرجى إدخال سعر صحيح (أرقام فقط)!");
+
             try {
                 addBtn.disabled = true; addBtn.innerHTML = 'جاري المعالجة... <i class="bi bi-hourglass-split"></i>';
                 let img1Url = document.getElementById('book-img1-file').files[0] ? await uploadFileToSupabase(document.getElementById('book-img1-file').files[0]) : null;
