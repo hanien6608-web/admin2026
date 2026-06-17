@@ -20,6 +20,13 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 
     <style>
+        :root {
+            --primary: #d4a373; /* ذهبي يوتوبيا */
+            --secondary: #800000; /* بورجوندي ملكي */
+            --dark: #1a140f; /* خشب داكن */
+            --glass: rgba(26, 20, 15, 0.85);
+        }
+
         /* --- الأساسيات والأنيميشن --- */
         * { user-select: none; caret-color: transparent !important; }
         input, textarea, [contenteditable="true"] { user-select: text; caret-color: #d4a373 !important; }
@@ -38,16 +45,113 @@
             padding: 20px; 
         }
         .admin-container { max-width: 1200px; margin: 0 auto; }
-        h1 { 
-            color: #e6d5b8; 
-            text-align: center; 
-            margin-bottom: 20px; 
-            border-bottom: 2px solid rgba(212, 163, 115, 0.4); 
-            padding-bottom: 10px; 
-            text-shadow: 0 0 20px rgba(212, 163, 115, 0.5); 
-            font-weight: 900;
-            font-size: 2rem;
+        
+        /* --- استايل اللوجو القديم الفخم --- */
+        .logo-text-premium {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #e6d5b8;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+            margin-bottom: 25px;
+            display: block;
+            cursor: default;
         }
+
+        /* --- تطوير قسم الحساب (Account Bar) --- */
+        .admin-top-header {
+            display: flex; 
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 5%;
+            background: transparent;
+            margin-bottom: 30px;
+        }
+        .logo-text {
+            font-size: 3.2rem; /* تكبير كلمة يوتوبيا لاند */
+            font-weight: 900;
+            color: #e6d5b8;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .logo-text:hover { color: #d4a373; text-shadow: 0 0 25px rgba(212, 163, 115, 0.5); }
+
+        /* 👑 ستايل قائمة الحساب الدائرية الذكية المنسدلة */
+        .profile-dropdown-wrapper {
+            position: relative;
+            z-index: 100;
+        }
+
+        .profile-trigger-btn {
+            width: 45px; /* تصغير حجم دائرة الحساب أكثر */
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2.5px solid rgba(212, 163, 115, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.8rem; /* تصغير الأيقونة الداخلية */
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-trigger-btn i {
+            display: inline-block;
+        }
+
+        .profile-trigger-btn:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            background: rgba(212, 163, 115, 0.1);
+            box-shadow: 0 0 20px rgba(212, 163, 115, 0.4);
+        }
+
+        .profile-hidden-menu {
+            position: absolute;
+            top: 60px; /* ضبط المسافة لتناسب الحجم الصغير الجديد */
+            left: 0;
+            width: 240px;
+            background: rgba(20, 15, 10, 0.6);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 18px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transform: translateY(15px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: right;
+        }
+
+        .profile-hidden-menu.show { /* التغيير للاعتماد على كلاس show بدلاً من hover */
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .menu-title { font-size: 0.75rem; color: var(--primary); text-transform: uppercase; margin-bottom: 5px; opacity: 0.8; }
+        .menu-email { font-size: 0.85rem; color: #ffffff; font-weight: 600; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; }
+
+        .menu-logout-link {
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--secondary); /* جعل اللون البورجوندي ثابتاً */
+            border: 1px solid var(--secondary);
+            padding: 10px 14px; border-radius: 12px; color: #ff6b6b; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s ease;
+            color: #fff; /* لون النص أبيض ليناسب الخلفية الغامقة */
+            box-shadow: 0 5px 15px rgba(128, 0, 0, 0.4);
+        }
+
         h3 { color: #d4a373; margin-top: 0; }
 
         .slide-animation {
@@ -208,8 +312,13 @@
             font-weight: 900;
             transition: 0.3s;
             color: #d4a373;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .nav-tab.active { background: #800000; color: white; box-shadow: 0 0 15px rgba(128, 0, 0, 0.5); }
+        .logout-tab { color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.3); }
+        .logout-tab:hover { background: #800000; color: white; border-color: transparent; }
 
         /* انميشن الأيقونات الموحد */
         @keyframes iconFloat {
@@ -493,11 +602,11 @@
 
         /* استايل احترافي لمربع البحث (Pill Shape) */
         .books-search-input-style {
-            background: rgba(0, 0, 0, 0.3) !important;
-            border: 2px solid rgba(212, 163, 115, 0.4) !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1.5px solid rgba(212, 163, 115, 0.3) !important;
             border-radius: 50px !important;
-            height: 38px !important;
-            padding-right: 40px !important;
+            height: 44px !important;
+            padding-right: 45px !important;
             font-size: 0.85rem !important;
             color: #ffffff !important;
             transition: 0.3s !important;
@@ -573,6 +682,62 @@
             min-width: 35px; 
             text-align: center;
             text-shadow: 0 0 10px rgba(212,163,115,0.3);
+        }
+
+        /* تطوير شكل زر عرض المنتهي (Toggle Pill) */
+        .status-toggle-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 3px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.65rem;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            min-width: 75px;
+            backdrop-filter: blur(10px);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        .status-toggle-pill input { display: none; }
+
+        .status-toggle-pill.is-available {
+            background: linear-gradient(145deg, hsl(120, 81%, 38%), hsl(145 40% 45% / 15%));
+            border-bottom: 3px solid hsl(120, 81%, 38%);
+        }
+        .status-toggle-pill.is-available:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            filter: brightness(1.2);
+        }
+
+        .status-toggle-pill.is-oos {
+            background: linear-gradient(145deg, hsl(0, 91%, 42%), hsl(0 50% 45% / 15%));
+            border-bottom: 3px solid hsl(0, 91%, 42%);
+        }
+        .status-toggle-pill.is-oos:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 5px 15px rgba(192, 57, 43, 0.4);
+            filter: brightness(1.2);
+        }
+
+        /* 🌟 تمييز زر الفلتر عند تفعيله (دايسة عليه) */
+        .status-toggle-pill.active {
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4) !important;
+            transform: scale(1.08) translateY(-2px);
+            filter: brightness(1.4);
+        }
+
+        /* زر الفلتر في حالة عدم التفعيل يكون مطفأ وهادئ */
+        #oos-filter-pill:not(.active) {
+            opacity: 0.6;
+            filter: grayscale(0.8);
+            background: rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(212, 163, 115, 0.2);
         }
 
         /* ستايلات اختيار الأقسام الاحترافية (Chips) */
@@ -769,7 +934,25 @@
 
     <div class="admin-overlay">
     <div class="admin-container">
-        <h1>يوتوبيا لاند Dashboard 📚</h1>
+        <div class="admin-top-header">
+            <div class="admin-logo-side">
+                <div class="logo-text" onclick="switchSection('orders', document.querySelectorAll('.nav-tab')[0])">يوتوبيا لاند</div>
+            </div>
+            <!-- 👑 نظام قائمة الحساب الدائرية الذكية المنسدلة -->
+            <div class="profile-dropdown-wrapper" id="adminDropdown">
+                <div class="profile-trigger-btn" onclick="toggleProfileMenu(event)">
+                    <i class="bi bi-person-fill-gear"></i>
+                </div>
+                <div class="profile-hidden-menu" id="profile-menu">
+                    <div class="menu-title">المسؤول النشط</div>
+                    <div class="menu-email" id="display-admin-email">جاري التحميل...</div>
+                    <div onclick="handleLogout();" class="menu-logout-link">
+                        <span>تسجيل الخروج</span>
+                        <i class="bi bi-power"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- أزرار التنقل الرئيسية -->
         <div class="admin-nav">
@@ -930,27 +1113,55 @@
                 </div>
             </div>
 
+            <!-- شريط الإجراءات الجماعية للكتب -->
+            <div id="books-bulk-actions-bar" style="display: none; background: #1a140f; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 2px solid #d4a373; align-items: center; gap: 12px; flex-wrap: wrap; animation: fadeInUp 0.4s ease;">
+                <span style="font-weight: bold; color: #d4a373; white-space: nowrap;"><i class="bi bi-check2-all"></i> (<span id="books-selected-count">0</span>) كتاب:</span>
+                
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1;">
+                    <button class="btn-gold" style="padding: 0 15px; font-size: 0.8rem; height: 34px; background: linear-gradient(135deg, #800000, #4d0000); border: 1px solid #ff4d4d; color: white;" onclick="applyBulkStock(true)">تعليم كـ منتهي</button>
+                    <button class="btn-gold" style="padding: 0 15px; font-size: 0.8rem; height: 34px; background: linear-gradient(145deg, hsl(120, 81%, 38%), hsl(145 40% 45% / 15%)); border: 1px solid hsl(120, 81%, 38%); color: white;" onclick="applyBulkStock(false)">تعليم كـ متاح</button>
+                    
+                    <div style="width: 2px; height: 25px; background: rgba(212, 163, 115, 0.3); margin: 0 5px;"></div>
+                    
+                    <button class="btn-delete-book-admin" style="height: 34px; font-size: 0.8rem;" onclick="applyBulkDeleteBooks()"><i class="bi bi-trash3"></i> مسح الكتب</button>
+                    <button class="btn-burgundy" style="height: 34px; font-size: 0.8rem; background: transparent; border-color: #666;" onclick="clearBooksSelection()">إلغاء</button>
+                </div>
+            </div>
+
             <div class="table-wrapper">
                 <div style="padding: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid rgba(212,163,115,0.2);">
                     <h3 style="margin: 0; color: #d4a373; font-weight: 900;"><i class="bi bi-bookshelf"></i> أرفف الكتب</h3>
-                    <div class="filter-input-wrapper" style="max-width: 250px; width: 100%;">
-                        <i class="bi bi-search" style="right: 18px; font-size: 1.2rem; color: #d4a373;"></i>
-                        <input type="text" id="books-search-input" placeholder="ابحثي عن عنوان أو مؤلف..." oninput="searchBooksList(this.value)" class="books-search-input-style"> <!-- تم التأكد من وجود الكلاس هنا -->
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div id="oos-filter-pill" class="status-toggle-pill is-oos" onclick="this.classList.toggle('active'); const chk = document.getElementById('out-of-stock-filter'); chk.checked = !chk.checked; searchBooksList(document.getElementById('books-search-input').value);">
+                            <i class="bi bi-cart-x-fill"></i>
+                            <span>عرض المنتهي فقط</span>
+                            <input type="checkbox" id="out-of-stock-filter" style="display:none">
+                        </div>
+                        <div class="filter-input-wrapper" style="max-width: 300px; width: 100%;">
+                            <i class="bi bi-search" style="right: 18px; font-size: 1.1rem; color: #d4a373; z-index: 5;"></i>
+                            <input type="text" id="books-search-input" placeholder="ابحثي عن عنوان أو مؤلف..." oninput="searchBooksList(this.value)" class="books-search-input-style">
+                        </div>
                     </div>
                 </div>
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 60px;">
+                                <div class="table-check-wrapper" onclick="const chk = document.getElementById('select-all-books'); chk.checked = !chk.checked; toggleAllBooksCheckboxes(chk);">
+                                    <input type="checkbox" id="select-all-books" onclick="event.stopPropagation(); toggleAllBooksCheckboxes(this)">
+                                </div>
+                            </th>
                             <th>الصورة</th>
                             <th>العنوان</th>
                             <th>المؤلف</th>
                             <th>القسم</th>
+                            <th style="text-align: center;"><i class="bi bi-slash-circle-fill" title="حالة التوفر (منتهي)"></i></th>
                             <th>السعر</th>
                             <th style="text-align: center;">الإجراءات</th>
                         </tr>
                     </thead>
                     <tbody id="books-table-body"> <!-- تم التأكد من وجود هذا الـ ID -->
-                        <tr><td colspan="6" style="text-align:center;">جاري جلب أرفف الكتب...</td></tr>
+                        <tr><td colspan="8" style="text-align:center;">جاري جلب أرفف الكتب...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1186,27 +1397,48 @@
 
     <script>
         /* --- [1] إعدادات الحالة والاتصال (App State & Config) --- */
-        // حماية بسيطة للوحة التحكم
-        // (function() {
-        //     const adminPass = localStorage.getItem('utopia_admin_key');
-        //     if (adminPass !== '123456') { // استبدلي 123456 بكلمة سر قوية جداً
-        //         const input = prompt("يرجى إدخال كلمة سر الإدارة للوصول:");
-        //         if (input === '123456') {
-        //             localStorage.setItem('utopia_admin_key', input);
-        //         } else {
-        //             document.body.innerHTML = '<h1 style="color:red; text-align:center; margin-top:50px;">عذراً، غير مسموح لك بالدخول ⛔</h1>';
-        //             window.location.href = "../index.html";
-        //             return;
-        //         }
-        //     }
-        // })();
-
         const supabaseUrl = 'https://ywbmamklqyrahwqifqdj.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3Ym1hbWtscXlyYWh3cWlmcWRqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTQ4MDM5OSwiZXhwIjoyMDkxMDU2Mzk5fQ.bHOZHb1zDAe-LUX1Vtt5G5UabhfHxUlQvrplxvZ0Dgo'; 
+        // تم التغيير للـ Anon Key ليتوافق مع نظام تسجيل الدخول ويفعل الـ RLS
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3Ym1hbWtscXlyYWh3cWlmcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODAzOTksImV4cCI6MjA5MTA1NjM5OX0.Dw3-6ZwoADEN6H0eaG_XhwM01t6v5mpXzst19LDf9es'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // نظام حماية لوحة التحكم المطور (Auth Gateway)
+        async function checkAdminAuth() {
+            try {
+                const { data: { user }, error } = await _supabase.auth.getUser();
+                
+                if (error || !user) {
+                    console.warn("User not authenticated or error occurred:", error);
+                    // إذا قمت بحذف صفحة login.html، الكود سيفشل هنا. 
+                    // يمكنك توجيهه لصفحة أخرى أو إظهار رسالة.
+                    alert("يجب تسجيل الدخول أولاً. تأكد من وجود ملف login.html");
+                    window.location.href = 'login.html'; 
+                    return;
+                }
+
+                document.getElementById('display-admin-email').innerText = user.email;
+                // إظهار المحتوى فقط إذا كان مسجل دخول
+                document.querySelector('.admin-overlay').style.opacity = '1';
+            } catch (err) {
+                console.error("Auth system failure:", err);
+                // إظهار الصفحة كحالة طوارئ أو تنبيه المستخدم
+                document.querySelector('.admin-overlay').style.opacity = '1';
+            }
+        }
+        
+        // إخفاء الصفحة مبدئياً لحين التأكد من الهوية
+        document.querySelector('.admin-overlay').style.opacity = '0';
+        checkAdminAuth();
 
         let allOrders = [];
         let currentOrders = [];
+
+        // وظيفة تسجيل الخروج
+        async function handleLogout() {
+            if (!confirm("هل أنتِ متأكدة من تسجيل الخروج؟ ✨")) return;
+            await _supabase.auth.signOut();
+            window.location.replace('login.html'); // تأكد أن هذا الملف موجود
+        }
         let allBooks = [];
         let activeChatPhone = null;
         let activeChatChannel = null;
@@ -1251,6 +1483,7 @@
             const { data, error } = await _supabase.from('books').select('*').order('created_at', { ascending: false });
             if (error) return console.error(error);
             allBooks = data;
+            clearBooksSelection(); // تنظيف التحديد عند تحديث البيانات
             renderBooksTable(allBooks);
         }
 
@@ -1679,15 +1912,15 @@
 
             activeChatChannel
                 .on('broadcast', { event: 'msg' }, payload => {
-                    if (payload.payload.sender === 'user') {
-                        // منع التكرار
-                        if (payload.payload.msgId === lastProcessedBroadcastId) return;
-                        lastProcessedBroadcastId = payload.payload.msgId;
-                        lastProcessedMsgText = payload.payload.text;
+                    // استقبال رسائل العميل ورسائل البوت (Admin)
+                    if (payload.payload.msgId === lastProcessedBroadcastId) return;
+                    lastProcessedBroadcastId = payload.payload.msgId;
+                    lastProcessedMsgText = payload.payload.text;
 
+                    if (payload.payload.sender === 'user') {
                         chatSound.currentTime = 0; chatSound.play().catch(()=>{});
-                        appendMsg(payload.payload.text, 'user');
                     }
+                    appendMsg(payload.payload.text, payload.payload.sender);
                 })
                 .on('broadcast', { event: 'typing' }, payload => {
                     if (payload.payload.sender === 'user') {
@@ -1701,15 +1934,15 @@
                     }
                 })
                 .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `customer_phone=eq.${activeChatPhone}` }, (payload) => {
-                    if (payload.new.sender === 'user') {
-                        // منع التكرار مع البث المباشر
-                        if (payload.new.text === lastProcessedMsgText) return;
-                        lastProcessedMsgText = payload.new.text;
+                    // منع التكرار مع البث المباشر أو الإرسال اليدوي
+                    if (payload.new.text === lastProcessedMsgText) return;
+                    lastProcessedMsgText = payload.new.text;
 
+                    if (payload.new.sender === 'user') {
                         chatSound.currentTime = 0;
                         chatSound.play().catch(() => {});
-                        appendMsg(payload.new.text, 'user');
                     }
+                    appendMsg(payload.new.text, payload.new.sender);
                 })
                 .on('broadcast', { event: 'delete_chat' }, () => {
                     document.getElementById('chat-body').innerHTML = '<div style="text-align:center; padding:20px; opacity:0.5;">تم المسح ✅</div>';
@@ -1800,12 +2033,17 @@
             // إيقاف مؤشر الكتابة عند الإرسال
             if (activeChatChannel) activeChatChannel.send({ type: 'broadcast', event: 'typing', payload: { typing: false, sender: 'admin' } });
 
+            // تحديث معرّفات منع التكرار قبل الإرسال
+            const msgId = Date.now();
+            lastProcessedBroadcastId = msgId;
+            lastProcessedMsgText = text;
+
             if (activeChatChannel) {
                 // إرسال البث المباشر فوراً لضمان السرعة عند العميل بدون ريستارت
                 activeChatChannel.send({ 
                     type: 'broadcast', 
                     event: 'msg', 
-                    payload: { text, sender: 'admin', msgId: Date.now() } 
+                    payload: { text, sender: 'admin', msgId } 
                 });
             }
 
@@ -2129,14 +2367,30 @@
 
             try {
                 addBtn.disabled = true; addBtn.innerHTML = 'جاري المعالجة... <i class="bi bi-hourglass-split"></i>';
-                let img1Url = document.getElementById('book-img1-file').files[0] ? await uploadFileToSupabase(document.getElementById('book-img1-file').files[0]) : null;
-                let img2Url = document.getElementById('book-img2-file').files[0] ? await uploadFileToSupabase(document.getElementById('book-img2-file').files[0]) : null;
+                let img1File = document.getElementById('book-img1-file').files[0];
+                let img2File = document.getElementById('book-img2-file').files[0];
+                
+                let img1Url = img1File ? await uploadFileToSupabase(img1File) : null;
+                let img2Url = img2File ? await uploadFileToSupabase(img2File) : null;
+
                 const bookData = { title, author: document.getElementById('book-author').value.trim(), price: parseFloat(price), category: selectedCategories.join(', '), description: document.getElementById('book-desc').value.trim() };
-                if (img1Url) bookData.image_url = img1Url; if (img2Url) bookData.image_url2 = img2Url;
-                const { error } = editingBookId ? await _supabase.from('books').update(bookData).eq('id', editingBookId) : await _supabase.from('books').insert([bookData]);
-                if (error) throw error;
-                alert("تمت العملية بنجاح! ✨"); fetchBooks(); toggleBookForm();
-            } catch (err) { alert("حدث خطأ: " + err.message); } finally { addBtn.disabled = false; }
+                
+                // لا نقوم بتحديث الـ URL إذا لم يتم رفع صورة جديدة
+                if (img1Url) bookData.image_url = img1Url; 
+                if (img2Url) bookData.image_url2 = img2Url;
+
+                const { error } = editingBookId ? 
+                    await _supabase.from('books').update(bookData).eq('id', editingBookId).select() : 
+                    await _supabase.from('books').insert([bookData]).select();
+
+                if (error) {
+                    console.error("Supabase Error:", error);
+                    throw new Error(error.message);
+                }
+                alert("تم حفظ بيانات الكتاب بنجاح! ✨"); 
+                await fetchBooks(); 
+                toggleBookForm();
+            } catch (err) { alert("حدث خطأ أثناء الإضافة: " + err.message); } finally { addBtn.disabled = false; addBtn.innerHTML = editingBookId ? 'تحديث البيانات <i class="bi bi-check-all"></i>' : 'حفظ بيانات الكتاب <i class="bi bi-cloud-arrow-up"></i>'; }
         }
 
         async function deleteBook(id) {
@@ -2150,7 +2404,7 @@
             if (!tbody) return; // Ensure tbody exists
 
             if (!booksToRender || booksToRender.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 40px; color: rgba(230, 213, 184, 0.7);">
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 40px; color: rgba(230, 213, 184, 0.7);">
                     <i class="bi bi-book-half" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
                     لا توجد كتب تطابق بحثك
                 </td></tr>`;
@@ -2158,12 +2412,24 @@
             }
             tbody.innerHTML = booksToRender.map(b => `
                 <tr class="clickable-row" onclick="openEditBook('${b.id}')">
+                    <td onclick="event.stopPropagation()">
+                        <div class="table-check-wrapper" onclick="const chk = this.querySelector('input'); chk.checked = !chk.checked; updateBooksSelectedCount();">
+                            <input type="checkbox" class="book-checkbox" value="${b.id}" onchange="updateBooksSelectedCount()" onclick="event.stopPropagation()">
+                        </div>
+                    </td>
                     <td><img src="${b.image_url ? (b.image_url.startsWith('http') ? b.image_url : supabaseUrl + '/storage/v1/object/public/books-images/' + b.image_url) : ''}" style="width:55px; height:80px; object-fit:contain; border-radius:8px; border: 1px solid rgba(212,163,115,0.3);"></td>
                     <td><b>${b.title}</b></td>
                     <td>${b.author}</td>
                     <td><div style="display:flex; flex-wrap:wrap; gap:5px;">
                         ${b.category ? b.category.split(',').map(c => `<span style="font-size:0.65rem; background:rgba(212,163,115,0.15); padding:2px 8px; border-radius:6px; color:#d4a373;">${c.trim()}</span>`).join('') : ''}
                     </div></td>
+                        <td style="text-align: center;" onclick="event.stopPropagation()">
+                            <div class="status-toggle-pill ${b.stock_quantity <= 0 ? 'is-oos' : 'is-available'}" onclick="const chk = this.querySelector('input'); chk.checked = !chk.checked; toggleBookStock('${b.id}', chk.checked)">
+                                <input type="checkbox" ${b.stock_quantity <= 0 ? 'checked' : ''} onchange="toggleBookStock('${b.id}', this.checked)">
+                                <i class="bi ${b.stock_quantity <= 0 ? 'bi-cart-x-fill' : 'bi-cart-check-fill'}"></i>
+                                <span>${b.stock_quantity <= 0 ? 'منتهي' : 'متاح'}</span>
+                            </div>
+                        </td>
                     <td><b>${b.price} ج.م</b></td>
                     <td>
                         <button onclick="event.stopPropagation(); deleteBook('${b.id}')" class="btn-delete-book-admin"><i class="bi bi-trash3-fill"></i> حذف نهائي</button>
@@ -2178,16 +2444,93 @@
                 return;
             }
             const query = normalizeArabic(term).toLowerCase();
-            if (!query) {
-                renderBooksTable(allBooks); // If search term is empty, show all books
-                return;
-            }
+            const outOfStockOnly = document.getElementById('out-of-stock-filter').checked;
+
             const filtered = allBooks.filter(b => {
                 const normTitle = normalizeArabic(b.title).toLowerCase();
                 const normAuthor = normalizeArabic(b.author).toLowerCase();
-                return normTitle.includes(query) || normAuthor.includes(query);
+                const matchesSearch = !query || normTitle.includes(query) || normAuthor.includes(query);
+                const matchesStock = !outOfStockOnly || (b.stock_quantity !== undefined && b.stock_quantity <= 0);
+                return matchesSearch && matchesStock;
             });
             renderBooksTable(filtered);
+            updateBooksSelectedCount(); // تحديث الشريط بعد البحث
+        }
+
+        // وظيفة سريعة لتغيير حالة المخزون (منتهي / متاح)
+        async function toggleBookStock(id, isFinished) {
+            // نستخدم 0 للمنتهي و 1 للمتاح
+            const newStock = isFinished ? 0 : 1;
+            const { error } = await _supabase.from('books').update({ stock_quantity: newStock }).eq('id', id);
+            
+            if (error) {
+                alert("حدث خطأ أثناء تحديث الحالة: " + error.message);
+            } else {
+                const book = allBooks.find(b => String(b.id) === String(id));
+                if (book) book.stock_quantity = newStock;
+                renderBooksTable(allBooks); // إعادة رسم الجدول لتحديث الألوان
+            }
+        }
+
+        /* --- [الإجراءات الجماعية للكتب] --- */
+        function toggleAllBooksCheckboxes(master) {
+            document.querySelectorAll('.book-checkbox').forEach(cb => cb.checked = master.checked);
+            updateBooksSelectedCount();
+        }
+
+        function updateBooksSelectedCount() {
+            const checkboxes = document.querySelectorAll('.book-checkbox');
+            const checked = document.querySelectorAll('.book-checkbox:checked');
+            const bar = document.getElementById('books-bulk-actions-bar');
+            const countEl = document.getElementById('books-selected-count');
+            const selectAll = document.getElementById('select-all-books');
+            
+            if (checked.length > 0) {
+                bar.style.display = 'flex';
+                countEl.innerText = checked.length;
+            } else {
+                bar.style.display = 'none';
+            }
+
+            if (selectAll) {
+                selectAll.checked = checkboxes.length > 0 && checked.length === checkboxes.length;
+            }
+        }
+
+        function clearBooksSelection() {
+            const selectAll = document.getElementById('select-all-books');
+            if (selectAll) selectAll.checked = false;
+            toggleAllBooksCheckboxes({ checked: false });
+        }
+
+        async function applyBulkDeleteBooks() {
+            const selectedIds = Array.from(document.querySelectorAll('.book-checkbox:checked')).map(cb => cb.value);
+            if (!confirm(`هل أنتِ متأكدة من حذف ${selectedIds.length} كتاب نهائياً؟ لا يمكن التراجع!`)) return;
+
+            const { error } = await _supabase.from('books').delete().in('id', selectedIds);
+            if (error) {
+                alert("حدث خطأ أثناء الحذف: " + error.message);
+            } else {
+                alert("تم حذف الكتب المحددة بنجاح! 🗑️");
+                await fetchBooks();
+                clearBooksSelection();
+            }
+        }
+
+        async function applyBulkStock(isFinished) {
+            const selectedIds = Array.from(document.querySelectorAll('.book-checkbox:checked')).map(cb => cb.value);
+            const newStock = isFinished ? 0 : 1;
+            
+            if (!confirm(`هل تريدين تعليم ${selectedIds.length} كتاب كـ (${isFinished ? 'منتهي' : 'متاح'})؟`)) return;
+
+            const { error } = await _supabase.from('books').update({ stock_quantity: newStock }).in('id', selectedIds);
+            if (error) {
+                alert("حدث خطأ أثناء التحديث: " + error.message);
+            } else {
+                alert("تم تحديث حالة الكتب بنجاح! ✨");
+                await fetchBooks();
+                clearBooksSelection();
+            }
         }
 
         /* --- [الإجراءات الجماعية الذكية] --- */
@@ -2445,6 +2788,21 @@
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // وظيفة التحكم في فتح وإغلاق قائمة الملف الشخصي
+        function toggleProfileMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('profile-menu');
+            menu.classList.toggle('show');
+        }
+
+        // إغلاق القائمة عند الضغط في أي مكان آخر
+        window.addEventListener('click', (event) => {
+            const menu = document.getElementById('profile-menu');
+            if (menu && menu.classList.contains('show')) {
+                menu.classList.remove('show');
+            }
+        });
     </script>
 </body>
 </html>          

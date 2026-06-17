@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الوصول | يوتوبيا لاند</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #d4a373; /* ذهبي يوتوبيا */
+            --secondary: #800000; /* بورجوندي ملكي */
+            --dark: #1a140f; /* خشب داكن */
+            --glass: rgba(26, 20, 15, 0.85);
+            --text: #ffffff;
+        }
+
+        * { box-sizing: border-box; user-select: none; }
+        input { user-select: text !important; caret-color: var(--primary) !important; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* استخدام الصورة كخلفية ثابتة */
+            background-image: url('https://ywbmamklqyrahwqifqdj.supabase.co/storage/v1/object/public/books-images/oo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* طبقة تظليل فخمة وتغبيش خلف الكارت لضمان الوضوح */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(5px);
+            z-index: 1;
+        }
+
+        /* إعادة السديم السحري ليتفاعل مع الصورة */
+        .aurora-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            mix-blend-mode: soft-light; /* دمج الألوان مع تفاصيل المكتبة */
+        }
+        .blob {
+            position: absolute;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            opacity: 0.5;
+            filter: blur(120px);
+            animation: move 15s infinite alternate ease-in-out;
+        }
+        .blob-1 { background: var(--primary); top: -10%; left: -10%; }
+        .blob-2 { background: var(--secondary); bottom: -10%; right: -10%; animation-delay: -5s; }
+        .blob-3 { background: #4a3423; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-duration: 25s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, rgba(212, 163, 115, 0.4), transparent 30%);
+            animation: rotateGlow 12s linear infinite;
+            z-index: -1;
+        }
+
+        .login-card {
+            position: relative;
+            z-index: 10; /* فوق السديم والصورة */
+            width: 90%;
+            max-width: 420px;
+            background: rgba(20, 15, 10, 0.75); /* نفس لون جدول الطلبات */
+            backdrop-filter: blur(15px); /* نفس درجة تغبيش الجدول */
+            border-radius: 40px;
+            padding: 45px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+            text-align: center;
+            border: 1px solid rgba(212, 163, 115, 0.2);
+            overflow: hidden;
+            animation: premiumEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        /* انميشن المربع والأيقونة (حركة مزدوجة) */
+        @keyframes iconBoxFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes shieldInnerPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 5px rgba(0,0,0,0.3)); }
+            50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 15px var(--primary)); }
+        }
+
+        @keyframes rotateGlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes premiumEntrance {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .icon-circle {
+            width: 100px; height: 100px;
+            background: linear-gradient(135deg, var(--primary), #b08968);
+            border-radius: 24px; margin: 0 auto 25px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; color: var(--dark);
+            box-shadow: 0 15px 35px rgba(212, 163, 115, 0.4);
+            animation: iconBoxFloat 4s infinite ease-in-out; /* حركة المربع */
+        }
+
+        .icon-circle i {
+            display: inline-block;
+            animation: shieldInnerPulse 2s infinite ease-in-out; /* حركة الدرع */
+        }
+
+        h1 { font-size: 2rem; font-weight: 900; margin: 0 0 10px 0; background: linear-gradient(to right, var(--primary), #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p { color: var(--primary); opacity: 0.8; margin: 0 0 40px 0; font-size: 0.95rem; font-weight: bold; }
+        
+        .input-group { 
+            position: relative; 
+            margin-bottom: 25px; 
+            animation: premiumEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1) both;
+        }
+        .input-group:nth-child(1) { animation-delay: 0.5s; }
+        .input-group:nth-child(2) { animation-delay: 0.7s; }
+
+        .input-group i { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem; }
+        
+        /* انميشن "مكان الكتابة" عند الضغط عليه */
+        input { width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(212, 163, 115, 0.2); border-radius: 20px; padding: 16px 50px 16px 20px; color: white; font-family: 'Cairo'; text-align: right; outline: none; transition: all 0.4s ease; }
+        input:focus { 
+            border-color: var(--primary); 
+            background: rgba(0, 0, 0, 0.6); 
+            box-shadow: 0 0 25px rgba(212, 163, 115, 0.3);
+            transform: translateY(-3px); /* حركة رفع خفيفة عند الكتابة */
+        }
+
+        .login-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary), #b08968); border: none; border-radius: 20px; color: var(--dark); font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        .login-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+        #error-msg { color: #f87171; font-size: 0.8rem; margin-top: 15px; display: none; }
+
+        /* انميشن التحميل الفخم */
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(26, 20, 15, 0.1);
+            border-top: 3px solid var(--dark);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* حالة الزر أثناء التحميل */
+        .login-btn:disabled {
+            opacity: 0.8;
+            cursor: wait;
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <!-- طبقة السديم الملونة فوق الصورة -->
+    <div class="aurora-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="login-card">
+        <div class="icon-circle"><i class="bi bi-shield-lock-fill"></i></div>
+        <h1>يوتوبيا لاند</h1>
+        <p>بوابة الوصول للوحة الإدارة الآمنة</p>
+        <form onsubmit="event.preventDefault(); login();">
+            <div class="input-group"><input type="email" id="email" placeholder="البريد الإلكتروني" required><i class="bi bi-envelope-fill"></i></div>
+            <div class="input-group"><input type="password" id="password" placeholder="كلمة المرور" required><i class="bi bi-key-fill"></i></div>
+            <button type="submit" class="login-btn">تسجيل الدخول <i class="bi bi-box-arrow-in-right"></i></button>
+        </form>
+        <div id="error-msg"></div>
+    </div>
+    <script>
+        const supabaseUrl = 'https://ywbmamklqyrahwqifqdj.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3Ym1hbWtscXlyYWh3cWlmcWRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODAzOTksImV4cCI6MjA5MTA1NjM5OX0.Dw3-6ZwoADEN6H0eaG_XhwM01t6v5mpXzst19LDf9es'; 
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.querySelector('.login-btn');
+            const originalContent = btn.innerHTML;
+
+            btn.disabled = true; 
+            btn.innerHTML = 'جاري الدخول... <div class="spinner"></div>';
+            const { error } = await _supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                document.getElementById('error-msg').innerText = "خطأ: " + (error.message === "Invalid login credentials" ? "بيانات الدخول غير صحيحة" : error.message);
+                document.getElementById('error-msg').style.display = 'block';
+                btn.disabled = false; btn.innerHTML = originalContent;
+            } else { window.location.href = 'index.html'; }
+        }
+    </script>
+</body>
+</html>
