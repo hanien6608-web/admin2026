@@ -49,118 +49,147 @@
         @media (max-width: 768px) {
             .admin-overlay { padding: 10px; }
             .admin-top-header {
-                padding: 10px 5px;
-                margin-bottom: 15px;
+                padding: 15px 10px;
+                margin-bottom: 10px;
+                flex-direction: row;
+                justify-content: space-between;
             }
-            .logo-text { font-size: 2rem; }
+            .logo-text { font-size: 1.8rem; }
             
             .admin-nav {
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                margin-bottom: 0;
-                border-radius: 20px 20px 0 0;
+                margin: 0;
+                border-radius: 25px 25px 0 0;
                 z-index: 9999;
                 justify-content: space-around;
-                background: rgba(20, 15, 10, 0.95);
-                backdrop-filter: blur(20px);
-                padding: 10px 5px;
+                background: rgba(26, 20, 15, 0.98);
+                backdrop-filter: blur(25px);
+                padding: 12px 5px 25px 5px; /* مسافة إضافية للأسفل لموبايلات الآيفون */
                 gap: 0;
+                border-top: 2px solid var(--primary);
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
             }
             .nav-tab {
                 flex-direction: column;
-                font-size: 0.65rem;
+                font-size: 0.7rem;
                 padding: 5px;
-                gap: 3px;
-                opacity: 0.6;
+                gap: 5px;
+                opacity: 0.5;
+                flex: 1;
             }
-            .nav-tab i { font-size: 1.2rem !important; margin: 0; }
+            .nav-tab i { font-size: 1.4rem !important; margin: 0; }
             .nav-tab.active { background: transparent; color: var(--primary); box-shadow: none; opacity: 1; }
-            .nav-tab.active i { transform: scale(1.2); }
+            .nav-tab.active i { transform: translateY(-5px); transition: 0.3s; }
 
-            /* الإحصائيات كشريط تمرير أفقي */
+            /* الإحصائيات: نظام شبكة 2 في 2 بدل التمرير لسهولة الرؤية */
             .stats-grid {
-                display: flex;
-                overflow-x: auto;
-                gap: 12px;
-                padding-bottom: 15px;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-bottom: 20px;
             }
-            .stats-grid::-webkit-scrollbar { display: none; }
             .stat-card {
-                flex: 0 0 140px;
-                height: 130px;
-                padding: 15px 10px;
+                height: 110px;
+                padding: 12px 8px;
+                border-radius: 18px;
             }
-            .stat-card i { font-size: 1.5rem; }
-            .stat-card b { font-size: 1.1rem; }
-            .stat-card span { font-size: 0.7rem; }
+            .stat-card i { font-size: 1.4rem; margin-bottom: 5px; }
+            .stat-card b { font-size: 1.2rem; }
+            .stat-card span { font-size: 0.75rem; }
 
-            /* تحويل الجدول لكروت في الموبايل */
+            /* الفلاتر: نظام مودال أو قائمة ملمومة */
+            .filters-section { 
+                grid-template-columns: 1fr 1fr; 
+                padding: 12px; 
+                gap: 10px;
+                border-radius: 20px;
+            }
+            .filter-group label { font-size: 0.7rem; }
+            .filter-group input, .filter-group select, .custom-filter-box {
+                height: 40px; /* تكبير حقول الإدخال لتناسب اللمس */
+                font-size: 0.8rem;
+            }
+
+            /* تحويل الجدول إلى كروت احترافية (Modern App Cards) */
             .table-wrapper { background: transparent; box-shadow: none; border: none; }
             table, thead, tbody, th, td, tr { display: block; }
             thead { display: none; }
             .order-row {
                 background: rgba(20, 15, 10, 0.8);
                 border: 1px solid rgba(212, 163, 115, 0.3);
-                border-radius: 20px;
-                margin-bottom: 15px;
-                padding: 15px;
+                border-radius: 22px;
+                margin-bottom: 18px;
+                padding: 18px;
                 position: relative;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+                animation: fadeInUp 0.4s ease-out;
             }
             .order-row td {
                 text-align: right;
-                padding: 8px 0;
+                padding: 10px 0;
                 border-bottom: 1px solid rgba(255,255,255,0.05);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 word-break: break-word;
+                font-size: 0.85rem;
             }
+            .order-row td:first-child { position: absolute; top: 15px; left: 15px; border: none; padding: 0; width: auto; z-index: 10; }
             .order-row td:last-child { border-bottom: none; }
             
-            /* إضافة تسميات الحقول يدوياً في الموبايل */
             .order-row td::before {
                 content: attr(data-label);
                 font-weight: bold;
                 color: var(--primary);
-                font-size: 0.75rem;
+                font-size: 0.8rem;
+                opacity: 0.8;
             }
             
-            /* تنسيق خاص لزر الشات وحالة الطلب في الكارت */
-            .order-row td:nth-last-child(2), .order-row td:last-child {
+            .order-row td:nth-last-child(2) { /* زر فتح الشات */
                 justify-content: center;
-                padding: 12px 0;
-                background: rgba(212, 163, 115, 0.05);
-                margin-top: 5px;
-                border-radius: 10px;
+                padding: 5px 0;
+                margin-top: 10px;
             }
+            .order-row td:nth-last-child(2) button { width: 100%; height: 45px; font-size: 0.9rem !important; border-radius: 12px; }
+            
+            .order-row td:last-child { /* حالة الطلب */
+                justify-content: center;
+                padding: 0;
+            }
+            .order-row td:last-child .status-badge { width: 100%; height: 40px; border-radius: 12px; font-size: 0.9rem; }
+
             .order-row td:nth-last-child(2)::before, .order-row td:last-child::before { content: none; }
 
-            /* الفلاتر ملمومة في موبايل */
-            .filters-section { grid-template-columns: 1fr 1fr; padding: 10px; gap: 8px; }
-            
+            /* الأزرار العائمة */
             .export-btn {
-                padding: 10px 15px;
-                font-size: 0.8rem;
-                bottom: 85px;
+                padding: 12px 20px;
+                font-size: 0.85rem;
+                bottom: 95px;
+                left: 15px;
             }
-            .export-btn.word { bottom: 135px; }
+            .export-btn.word { bottom: 150px; }
             
             /* تحسين الشات في الموبايل */
-            .details-chat-grid { margin-top: 20px; gap: 20px; }
+            .details-chat-grid { margin-top: 20px; gap: 15px; }
             .chat-container { height: 450px; }
-            .qty-btn-admin { width: 35px; height: 35px; font-size: 1.2rem; }
+            .qty-btn-admin { width: 40px; height: 40px; }
             
             /* كروت الكتب في الموبايل */
-            #books-table-body tr {
+            #books-table-body tr { 
                 display: grid;
-                grid-template-columns: 80px 1fr;
-                gap: 15px;
+                grid-template-columns: 1fr 2fr;
+                gap: 10px;
                 padding: 15px;
+                background: rgba(20, 15, 10, 0.7);
+                border-radius: 20px;
+                margin-bottom: 12px;
             }
+            #books-table-body td { border: none; padding: 5px; }
+            #books-table-body td:first-child { grid-column: 1/-1; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+            #books-table-body td:nth-child(2) { grid-row: 2 / 5; }
+            #books-table-body td:nth-child(2) img { width: 100px; height: 140px; }
         }
 
         /* --- استايل اللوجو القديم الفخم --- */
