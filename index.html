@@ -39,54 +39,128 @@
         }
         body { font-family: 'Cairo', sans-serif; background-image: url('https://ywbmamklqyrahwqifqdj.supabase.co/storage/v1/object/public/books-images/oo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; color: #e6d5b8; margin: 0; }
         .admin-overlay {
-            background: rgba(0, 0, 0, 0.5); /* تفتيح الخلفية لتظهر صورة الكتب خلف الزجاج */
-            backdrop-filter: none;
+            background: rgba(0, 0, 0, 0.6);
             min-height: 100vh; 
             padding: 20px; 
         }
-        .admin-container { max-width: 1200px; margin: 0 auto; }
+        .admin-container { max-width: 1200px; margin: 0 auto; padding-bottom: 80px; }
         
         /* --- تحسينات الشاشات الصغيرة (Mobile Optimization) --- */
         @media (max-width: 768px) {
+            .admin-overlay { padding: 10px; }
             .admin-top-header {
-                flex-direction: column;
-                gap: 15px;
-                padding: 10px;
+                padding: 10px 5px;
+                margin-bottom: 15px;
             }
-            .logo-text { font-size: 2.2rem; }
+            .logo-text { font-size: 2rem; }
             
             .admin-nav {
-                gap: 10px;
-                padding: 10px;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                margin-bottom: 0;
+                border-radius: 20px 20px 0 0;
+                z-index: 9999;
+                justify-content: space-around;
+                background: rgba(20, 15, 10, 0.95);
+                backdrop-filter: blur(20px);
+                padding: 10px 5px;
+                gap: 0;
             }
             .nav-tab {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-                flex: 1 1 40%;
-                justify-content: center;
+                flex-direction: column;
+                font-size: 0.65rem;
+                padding: 5px;
+                gap: 3px;
+                opacity: 0.6;
             }
+            .nav-tab i { font-size: 1.2rem !important; margin: 0; }
+            .nav-tab.active { background: transparent; color: var(--primary); box-shadow: none; opacity: 1; }
+            .nav-tab.active i { transform: scale(1.2); }
 
+            /* الإحصائيات كشريط تمرير أفقي */
             .stats-grid {
-                grid-template-columns: 1fr 1fr; /* جعل الإحصائيات صفين في الموبايل */
-                gap: 8px;
+                display: flex;
+                overflow-x: auto;
+                gap: 12px;
+                padding-bottom: 15px;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
             }
-            .stat-card { height: 150px; padding: 15px 5px; }
-            .stat-card b { font-size: 1.3rem; }
-            .stat-card i { font-size: 1.6rem; }
+            .stats-grid::-webkit-scrollbar { display: none; }
+            .stat-card {
+                flex: 0 0 140px;
+                height: 130px;
+                padding: 15px 10px;
+            }
+            .stat-card i { font-size: 1.5rem; }
+            .stat-card b { font-size: 1.1rem; }
+            .stat-card span { font-size: 0.7rem; }
 
-            .filters-section {
-                grid-template-columns: 1fr 1fr; /* الفلاتر تظهر جنب بعضها */
+            /* تحويل الجدول لكروت في الموبايل */
+            .table-wrapper { background: transparent; box-shadow: none; border: none; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; }
+            .order-row {
+                background: rgba(20, 15, 10, 0.8);
+                border: 1px solid rgba(212, 163, 115, 0.3);
+                border-radius: 20px;
+                margin-bottom: 15px;
+                padding: 15px;
+                position: relative;
             }
-            .filter-group:last-child {
-                grid-column: 1 / -1; /* زر المسح يأخذ العرض كاملاً */
+            .order-row td {
+                text-align: right;
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                word-break: break-word;
             }
+            .order-row td:last-child { border-bottom: none; }
+            
+            /* إضافة تسميات الحقول يدوياً في الموبايل */
+            .order-row td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: var(--primary);
+                font-size: 0.75rem;
+            }
+            
+            /* تنسيق خاص لزر الشات وحالة الطلب في الكارت */
+            .order-row td:nth-last-child(2), .order-row td:last-child {
+                justify-content: center;
+                padding: 12px 0;
+                background: rgba(212, 163, 115, 0.05);
+                margin-top: 5px;
+                border-radius: 10px;
+            }
+            .order-row td:nth-last-child(2)::before, .order-row td:last-child::before { content: none; }
+
+            /* الفلاتر ملمومة في موبايل */
+            .filters-section { grid-template-columns: 1fr 1fr; padding: 10px; gap: 8px; }
             
             .export-btn {
                 padding: 10px 15px;
                 font-size: 0.8rem;
-                bottom: 85px; /* رفع الأزرار قليلاً لتجنب تداخلها مع المتصفح */
+                bottom: 85px;
             }
-            .export-btn.word { bottom: 140px; }
+            .export-btn.word { bottom: 135px; }
+            
+            /* تحسين الشات في الموبايل */
+            .details-chat-grid { margin-top: 20px; gap: 20px; }
+            .chat-container { height: 450px; }
+            .qty-btn-admin { width: 35px; height: 35px; font-size: 1.2rem; }
+            
+            /* كروت الكتب في الموبايل */
+            #books-table-body tr {
+                display: grid;
+                grid-template-columns: 80px 1fr;
+                gap: 15px;
+                padding: 15px;
+            }
         }
 
         /* --- استايل اللوجو القديم الفخم --- */
@@ -1783,25 +1857,25 @@
             }
             tbody.innerHTML = data.map(o => `
                     <tr id="row-${o.id}" onclick="selectOrder('${o.id}')" class="order-row">
-                        <td onclick="event.stopPropagation()">
+                        <td data-label="تحديد" onclick="event.stopPropagation()">
                             <div class="table-check-wrapper" onclick="const chk = this.querySelector('input'); chk.checked = !chk.checked; updateSelectedCount();">
                                 <input type="checkbox" class="order-checkbox" value="${o.id}" onchange="updateSelectedCount()" onclick="event.stopPropagation()">
                             </div>
                         </td>
-                        <td><b>#${o.id}</b></td>
-                        <td dir="ltr" style="font-size:0.7rem;">${formatEgyptTime(o.created_at)}</td>
-                        <td>${o.customer_name}</td>
-                        <td>${o.customer_phone}</td>
-                        <td><a href="https://wa.me/2${o.customer_whatsapp}" target="_blank" class="wa-link" title="فتح شات واتساب" onclick="event.stopPropagation()"><i class="bi bi-whatsapp"></i></a> ${o.customer_whatsapp}</td>
-                        <td>${o.province}</td>
-                        <td><div style="max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${o.address}</div></td>
-                        <td>
+                        <td data-label="رقم الطلب"><b>#${o.id}</b></td>
+                        <td data-label="التوقيت" dir="ltr" style="font-size:0.7rem;">${formatEgyptTime(o.created_at)}</td>
+                        <td data-label="الاسم">${o.customer_name}</td>
+                        <td data-label="الموبايل">${o.customer_phone}</td>
+                        <td data-label="واتساب"><a href="https://wa.me/2${o.customer_whatsapp}" target="_blank" class="wa-link" title="فتح شات واتساب" onclick="event.stopPropagation()"><i class="bi bi-whatsapp"></i></a> ${o.customer_whatsapp}</td>
+                        <td data-label="المحافظة">${o.province}</td>
+                        <td data-label="العنوان"><div class="mobile-wrap">${o.address}</div></td>
+                        <td data-label="الكتب">
                             <div style="max-width:200px; font-size:0.8rem; line-height:1.4; color: #d4a373; font-weight: bold;">
                                 ${o.items ? o.items.map(item => `• ${item.title} (x${item.qty})`).join('<br>') : 'لا توجد بيانات'}
                             </div>
                         </td>
-                        <td><b>${o.total_amount} ج.م</b></td>
-                        <td>
+                        <td data-label="الإجمالي"><b>${o.total_amount} ج.م</b></td>
+                        <td data-label="الشات">
                             <button class="btn-view" style="font-size: 0.75rem; padding: 4px 10px; background: rgba(212, 163, 115, 0.2); color: #d4a373; border: 1px solid #d4a373; position: relative;">
                                 <i class="bi bi-chat-dots-fill"></i> فتح الشات
                                 ${window.pendingChatPhones && window.pendingChatPhones.includes(String(o.customer_phone).replace(/\D/g, '')) ? 
