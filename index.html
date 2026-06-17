@@ -46,6 +46,49 @@
         }
         .admin-container { max-width: 1200px; margin: 0 auto; }
         
+        /* --- تحسينات الشاشات الصغيرة (Mobile Optimization) --- */
+        @media (max-width: 768px) {
+            .admin-top-header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 10px;
+            }
+            .logo-text { font-size: 2.2rem; }
+            
+            .admin-nav {
+                gap: 10px;
+                padding: 10px;
+            }
+            .nav-tab {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                flex: 1 1 40%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr; /* جعل الإحصائيات صفين في الموبايل */
+                gap: 8px;
+            }
+            .stat-card { height: 150px; padding: 15px 5px; }
+            .stat-card b { font-size: 1.3rem; }
+            .stat-card i { font-size: 1.6rem; }
+
+            .filters-section {
+                grid-template-columns: 1fr 1fr; /* الفلاتر تظهر جنب بعضها */
+            }
+            .filter-group:last-child {
+                grid-column: 1 / -1; /* زر المسح يأخذ العرض كاملاً */
+            }
+            
+            .export-btn {
+                padding: 10px 15px;
+                font-size: 0.8rem;
+                bottom: 85px; /* رفع الأزرار قليلاً لتجنب تداخلها مع المتصفح */
+            }
+            .export-btn.word { bottom: 140px; }
+        }
+
         /* --- استايل اللوجو القديم الفخم --- */
         .logo-text-premium {
             font-size: 2.8rem;
@@ -1045,15 +1088,22 @@
         <div id="section-dev" style="display: none; animation: fadeInUp 0.6s ease;">
             <div class="card" style="text-align: center; padding: 60px 20px; border: 2px solid #d4a373;">
                 <i class="bi bi-incognito" style="font-size: 5rem; color: #d4a373; margin-bottom: 20px; display: block;"></i>
-                <h2 style="color: #e6d5b8; margin-bottom: 10px; font-weight: 900;">Creative Developer</h2>
-                <p style="color: #d4a373; margin-bottom: 40px; font-size: 1.1rem;">نحول شغفكِ إلى واقع رقمي متكامل ✨</p>
+                <h2 style="color: #e6d5b8; margin-bottom: 10px; font-weight: 900;">حنين - Haneen ✨</h2>
+                <p style="color: #d4a373; margin-bottom: 40px; font-size: 1.1rem;">أقوم بتحويل شغفكِ إلى واقع رقمي متكامل واحترافي</p>
                 
-                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 20px;">
-                    <a href="https://facebook.com" target="_blank" class="dev-social-icon" title="فيسبوك"><i class="bi bi-facebook"></i></a>
-                    <a href="https://instagram.com" target="_blank" class="dev-social-icon" title="إنستجرام"><i class="bi bi-instagram"></i></a>
-                    <a href="https://wa.me/201551455490" target="_blank" class="dev-social-icon" title="واتساب"><i class="bi bi-whatsapp"></i></a>
-                    <a href="tel:201551455490" class="dev-social-icon" title="اتصال هاتفي"><i class="bi bi-telephone-fill"></i></a>
-                    <a href="mailto:dev@example.com" class="dev-social-icon" title="إيميل"><i class="bi bi-envelope-at-fill"></i></a>
+                <!-- كارت التواصل المطور داخل المربع -->
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(212, 163, 115, 0.2); border-radius: 20px; padding: 30px; display: inline-block; width: 100%; max-width: 500px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);">
+                    <h4 style="color: #d4a373; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 163, 115, 0.2); padding-bottom: 10px; font-weight: 800;">بطاقة التواصل المباشر 🪪</h4>
+                    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                        <a href="tel:201551455490" class="dev-social-icon" title="اتصال هاتفي"><i class="bi bi-telephone-fill"></i></a>
+                        <a href="https://facebook.com" target="_blank" class="dev-social-icon" title="فيسبوك"><i class="bi bi-facebook"></i></a>
+                        <a href="https://wa.me/201551455490" target="_blank" class="dev-social-icon" title="واتساب"><i class="bi bi-whatsapp"></i></a>
+                        <a href="https://instagram.com" target="_blank" class="dev-social-icon" title="إنستجرام"><i class="bi bi-instagram"></i></a>
+                        <a href="mailto:dev@example.com" class="dev-social-icon" title="إيميل"><i class="bi bi-envelope-at-fill"></i></a>
+                    </div>
+                    <div style="margin-top: 25px; font-size: 0.85rem; color: rgba(230, 213, 184, 0.6);">
+                        <p>متاح دائماً لتطوير وتحديث منصتكِ بأحدث التقنيات الرقمية 🚀</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1628,8 +1678,11 @@
 
             const lastMsgs = {};
             if (msgData) {
-                // بنمر على كل الرسائل وبنخزن آخر رسالة وصلت لكل رقم موبايل
-                msgData.forEach(m => { lastMsgs[m.customer_phone] = m; });
+                // بنمر على كل الرسائل وبنخزن آخر رسالة وصلت لكل رقم موبايل مع تنظيف الرقم
+                msgData.forEach(m => { 
+                    const clean = String(m.customer_phone).replace(/\D/g, '');
+                    lastMsgs[clean] = m; 
+                });
             }
             // بنفلتر الأرقام اللي آخر رسالة عندها كانت من العميل 
             // وبنتأكد إن الرقم ده موجود فعلاً في قائمة الأوردرات عشان ما يبقاش رقم وهمي
@@ -2347,7 +2400,10 @@
 
         async function uploadFileToSupabase(file) {
             if (!file) return null;
-            const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+            // استخراج الامتداد فقط (مثل jpg) وتوليد اسم رقمي فريد لتجنب مشاكل الحروف العربية
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}.${fileExt}`;
+            
             const { error } = await _supabase.storage.from('books-images').upload(fileName, file);
             if (error) throw error;
             const { data: urlData } = _supabase.storage.from('books-images').getPublicUrl(fileName);
@@ -2725,11 +2781,9 @@
                 }, async (payload) => { // جعل الدالة async لاستخدام await
                     if (payload.eventType === 'INSERT') {
                         if (payload.new.sender === 'user') {
-                            // تشغيل الصوت فقط لو الشات مش مفتوح مع الشخص ده (عشان ما يحصلش صدى)
-                            if (activeChatPhone !== payload.new.customer_phone.replace(/\D/g, '')) {
-                                chatSound.currentTime = 0;
-                                chatSound.play().catch(() => {});
-                            }
+                            // تشغيل الصوت دائماً عند وصول رسالة جديدة من عميل لتنبيه الإدارة
+                            chatSound.currentTime = 0;
+                            chatSound.play().catch(() => console.log("التفاعل مطلوب لتشغيل الصوت"));
                             
                             // إشعار المتصفح في الخلفية
                             if (document.hidden || activeChatPhone !== payload.new.customer_phone) {
@@ -2737,8 +2791,9 @@
                             }
 
                             // تحديث قائمة الشاتات المعلقة فوراً
-                            if (!window.pendingChatPhones.includes(payload.new.customer_phone)) {
-                                window.pendingChatPhones.push(payload.new.customer_phone);
+                            const cleanNewPhone = String(payload.new.customer_phone).replace(/\D/g, '');
+                            if (!window.pendingChatPhones.includes(cleanNewPhone)) {
+                                window.pendingChatPhones.push(cleanNewPhone);
                                 document.getElementById('stat-pending-chats').innerText = window.pendingChatPhones.length;
                             }
                         }
