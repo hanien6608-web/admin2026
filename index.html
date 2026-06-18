@@ -28,8 +28,13 @@
         }
 
         /* --- الأساسيات والأنيميشن --- */
-        * { user-select: none; caret-color: transparent !important; }
-        input, textarea, [contenteditable="true"] { user-select: text; caret-color: #d4a373 !important; }
+        * { 
+            user-select: none; 
+            caret-color: transparent !important; 
+            box-sizing: border-box; /* ضمان أن الحواف لا تزيد من عرض العناصر */
+        }
+        html, body { overflow-x: hidden; width: 100%; position: relative; }
+        input, textarea, [contenteditable="true"] { user-select: text; caret-color: var(--primary) !important; }
         /* السماح باختيار أرقام الهواتف والطلبات للنسخ */
         td, b { user-select: text; }
 
@@ -954,26 +959,36 @@
             .logo-text { font-size: 1.8rem; }
             
             .mobile-menu-btn { display: block; }
+            .mobile-menu-btn i { pointer-events: none; } /* منع الأيقونة من اعتراض النقرة */
 
             /* تحويل النافبار لقائمة منسدلة في الموبايل */
             .admin-nav {
                 display: none;
-                position: absolute;
-                top: 80px;
-                right: 10px;
-                left: 10px;
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 260px;
+                height: 100vh;
                 flex-direction: column;
+                justify-content: flex-start;
                 background: rgba(26, 20, 15, 0.98);
                 backdrop-filter: blur(20px);
                 box-shadow: 0 20px 40px rgba(0,0,0,0.8);
                 border: 1px solid var(--primary);
+                z-index: 10005;
+                padding-top: 80px;
             }
-            .admin-nav.mobile-active { display: flex; animation: premiumReveal 0.4s ease forwards; }
+            .admin-nav.mobile-active { 
+                display: flex; 
+                animation: premiumReveal 0.3s ease-out forwards; 
+            }
             .nav-tab { width: 100%; justify-content: flex-start; padding: 15px; border-bottom: 1px solid rgba(212,163,115,0.1); }
 
             /* تحويل الجداول إلى كروت للموبايل لمنع التمرير الأفقي */
             .table-wrapper { background: transparent; border: none; box-shadow: none; }
-            table, thead, tbody, th, td, tr { display: block; }
+            table { min-width: 0 !important; width: 100% !important; }
+            table, thead, tbody, th, td, tr { display: block; width: 100%; }
             thead tr { display: none; }
             tr { 
                 background: rgba(20, 15, 10, 0.85);
@@ -981,7 +996,8 @@
                 margin-bottom: 25px;
                 border-radius: 20px;
                 border: 1px solid rgba(212, 163, 115, 0.2);
-                padding: 20px; /* Increased padding for a more spacious card look */
+                padding: 15px;
+                width: 100% !important;
                 box-shadow: 0 10px 20px rgba(0,0,0,0.4);
                 border-left: 5px solid var(--primary); /* Add a prominent left border for style */
             }
@@ -990,11 +1006,10 @@
                 /* padding-right: 45% !important; */ /* Removed */
                 border-bottom: 1px solid rgba(212,163,115,0.05) !important;
                 position: relative;
-                text-align: left;
+                text-align: right;
                 min-height: 40px;
                 display: flex;
                 align-items: center;
-                justify-content: space-between; /* Key change: label on one side, value on other */
                 gap: 10px; /* Gap between label and value */
             }
             td:last-child { border-bottom: none !important; }
@@ -1007,8 +1022,10 @@
                 text-align: right;
                 font-size: 0.8rem; /* Slightly larger label font */
                 flex-shrink: 0; /* Prevent label from shrinking */
+                margin-left: auto; /* دفع العنوان لليسار في RTL */
             }
             /* استثناءات للكروت */
+            td[data-label] { flex-direction: row-reverse; justify-content: space-between; }
             td[data-label="تحديد"] { justify-content: center; padding-bottom: 15px !important; border-bottom: 2px solid rgba(212,163,115,0.2) !important; }
             td[data-label="تحديد"] .table-check-wrapper { margin: 0; } /* Remove auto margin */
 
@@ -1022,6 +1039,7 @@
             td[data-label="آخر رسالة"] {
                 justify-content: center; /* Center the button */
                 padding: 20px 0 !important; /* More padding for action button */
+                flex-direction: column;
                 background: rgba(212, 163, 115, 0.05); /* Subtle background for action area */
                 margin: 10px -20px -20px; /* Extend background to card edges */
                 border-radius: 0 0 20px 20px; /* Match card border radius */
@@ -1033,6 +1051,7 @@
             td[data-label="الإجراءات"] {
                 justify-content: center;
                 padding: 20px 0 !important;
+                flex-direction: column;
                 background: rgba(212, 163, 115, 0.05);
                 margin: 10px -20px -20px;
                 border-radius: 0 0 20px 20px;
@@ -1065,7 +1084,7 @@
                 margin-top: 10px;
             }
 
-            .table-wrapper th, .table-wrapper td { font-size: 0.75rem; padding: 10px 8px; }
+            .table-wrapper td { font-size: 0.8rem; padding: 10px 8px; }
             
             .details-chat-grid { margin-top: 35px; gap: 25px; }
             .chat-container { height: 420px; }
