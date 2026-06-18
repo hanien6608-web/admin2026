@@ -976,44 +976,70 @@
             table, thead, tbody, th, td, tr { display: block; }
             thead tr { display: none; }
             tr { 
-                background: rgba(20, 15, 10, 0.85); 
+                background: rgba(20, 15, 10, 0.85);
                 backdrop-filter: blur(15px); 
-                margin-bottom: 20px; 
-                border-radius: 20px; 
+                margin-bottom: 25px;
+                border-radius: 20px;
                 border: 1px solid rgba(212, 163, 115, 0.2);
-                padding: 15px;
+                padding: 20px; /* Increased padding for a more spacious card look */
                 box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+                border-left: 5px solid var(--primary); /* Add a prominent left border for style */
             }
             td { 
-                padding: 10px 0 !important; 
-                padding-right: 45% !important; 
+                padding: 12px 0 !important; /* Slightly more vertical padding */
+                /* padding-right: 45% !important; */ /* Removed */
                 border-bottom: 1px solid rgba(212,163,115,0.05) !important;
                 position: relative;
                 text-align: left;
                 min-height: 40px;
                 display: flex;
                 align-items: center;
-                justify-content: flex-end;
+                justify-content: space-between; /* Key change: label on one side, value on other */
+                gap: 10px; /* Gap between label and value */
             }
             td:last-child { border-bottom: none !important; }
             td:before {
                 content: attr(data-label);
-                position: absolute;
-                right: 0;
-                width: 40%;
-                font-weight: bold;
+                position: static; /* Key change: make it flow naturally */
+                width: auto; /* Key change: auto width */
+                font-weight: 900; /* Make label bolder */
                 color: var(--primary);
                 text-align: right;
-                font-size: 0.75rem;
+                font-size: 0.8rem; /* Slightly larger label font */
+                flex-shrink: 0; /* Prevent label from shrinking */
             }
             /* استثناءات للكروت */
-            td[data-label="الصورة"] img { width: 80px !important; height: 110px !important; }
-            td[data-label="الكتب المطلوبة"], td[data-label="الإجراءات"] { 
-                flex-direction: column; 
-                align-items: flex-end; 
-                padding-right: 0 !important;
+            td[data-label="تحديد"] { justify-content: center; padding-bottom: 15px !important; border-bottom: 2px solid rgba(212,163,115,0.2) !important; }
+            td[data-label="تحديد"] .table-check-wrapper { margin: 0; } /* Remove auto margin */
+
+            td[data-label="الصورة"] { justify-content: center; padding-bottom: 15px !important; border-bottom: 2px solid rgba(212,163,115,0.2) !important; }
+            td[data-label="الصورة"] img { width: 100px !important; height: 140px !important; border-radius: 15px; }
+
+            td[data-label="الكتب المطلوبة"] { flex-direction: column; align-items: flex-start; gap: 8px; }
+            td[data-label="الكتب المطلوبة"]:before { width: 100%; text-align: right; margin-bottom: 5px; } /* Label above content */
+            td[data-label="الكتب المطلوبة"] div { width: 100%; text-align: right; } /* Align content right */
+
+            td[data-label="آخر رسالة"] {
+                justify-content: center; /* Center the button */
+                padding: 20px 0 !important; /* More padding for action button */
+                background: rgba(212, 163, 115, 0.05); /* Subtle background for action area */
+                margin: 10px -20px -20px; /* Extend background to card edges */
+                border-radius: 0 0 20px 20px; /* Match card border radius */
+                border-top: 1px solid rgba(212,163,115,0.1) !important; /* Separator from above content */
             }
-            td[data-label="الكتب المطلوبة"]:before, td[data-label="الإجراءات"]:before { position: static; width: 100%; margin-bottom: 10px; }
+            td[data-label="الحالة"] { justify-content: space-between; } /* Keep status badge aligned */
+            td[data-label="الحالة"] span.status-badge { min-width: auto; } /* Allow status badge to shrink */
+
+            td[data-label="الإجراءات"] {
+                justify-content: center;
+                padding: 20px 0 !important;
+                background: rgba(212, 163, 115, 0.05);
+                margin: 10px -20px -20px;
+                border-radius: 0 0 20px 20px;
+                border-top: 1px solid rgba(212,163,115,0.1) !important;
+            }
+            td[data-label="حالة التوفر"] { justify-content: space-between; }
+            td[data-label="حالة التوفر"] .status-toggle-pill { min-width: auto; }
 
             /* توزيع كروت الإحصائيات بشكل عمودين متساويين */
             .stats-grid {
@@ -1034,6 +1060,10 @@
             .filter-group label { font-size: 0.7rem; }
             .filter-group input, .filter-group select, .custom-filter-box { height: 34px; font-size: 0.7rem; padding-right: 32px; }
             .reset-all-btn { grid-column: 1 / -1; width: 100%; margin-top: 5px; }
+            .filters-section .filter-group:last-child { /* Ensure reset button is always at the end */
+                grid-column: 1 / -1;
+                margin-top: 10px;
+            }
 
             .table-wrapper th, .table-wrapper td { font-size: 0.75rem; padding: 10px 8px; }
             
